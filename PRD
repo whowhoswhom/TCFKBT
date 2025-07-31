@@ -1,0 +1,194 @@
+# Product Requirements Document (PRD)
+
+## Project Title: Town & Country Ford Baseball Website
+
+---
+
+## Overview
+
+A modern, responsive, and clean website for the Town & Country Ford baseball team (Louisville, KY). Inspired by the visual style of [Cursor.so](https://cursor.so) and the structure of [MLB.com](https://mlb.com), the website will serve as a central hub for:
+
+* Game schedule and live scores
+* Player stats (batting & pitching)
+* Team roster and individual player profiles
+
+Target audience includes players, coaches, fans, and scouts.
+
+---
+
+## Goals (MVP Scope)
+
+* Visually impressive, brand-aligned landing page
+* Schedule page powered by GameChanger embedded widget
+* Roster grid page with clickable player cards
+* Individual player profile pages
+* Stats page showing sortable batting/pitching data (manual entry or Supabase-driven)
+* Mobile-first, responsive layout for all screen sizes
+* Consistent dark theme with Town & Country Ford color branding
+
+---
+
+## Style Guidelines
+
+* **Base Theme**: Dark Mode
+* **Colors**:
+
+  * Background: `#0D1117` (deep navy)
+  * Primary Text: `#FFFFFF`
+  * Accent Blue: `#003399` (Ford Blue)
+  * Secondary Accent: `#1F2937` (for cards/sections)
+* **Typography**: Inter or Sora (modern sans-serif)
+* **Layout**: Clean grid system, spacious padding, minimal outlines
+
+---
+
+## Tech Stack
+
+* **Frontend**: React (TypeScript), Tailwind CSS
+* **Backend**: Supabase (PostgreSQL)
+* **Authentication**: Supabase Auth (optional)
+* **Hosting**: Vercel
+* **IDE**: Cursor
+* **Version Control**: GitHub
+
+---
+
+## Core Routes
+
+### `/`
+
+* Hero banner with team name/logo
+* Featured player or game highlight
+* Quick navigation cards: Schedule | Stats | Roster
+* Team record summary (W/L)
+
+### `/schedule`
+
+* Embed GameChanger schedule widget:
+
+```html
+<div id="gc-schedule-widget-sc3g"></div>
+<script src="https://widgets.gc.com/static/js/sdk.v1.js"></script>
+<script>
+  window.GC.team.schedule.init({
+    target: "#gc-schedule-widget-sc3g",
+    widgetId: "65757a6d-892e-404b-967b-8a8ce768c76c",
+    maxVerticalGamesVisible: 4,
+  });
+</script>
+```
+
+* Responsive container with styled box and label ("Powered by GameChanger")
+
+### `/stats`
+
+* Tabs for Batting and Pitching
+* Tables with sortable headers
+* Pull data from Supabase (or allow manual CSV input later)
+* Filter by season
+
+### `/roster`
+
+* Grid of PlayerCards (photo, name, number, position)
+* Clickable to individual player page
+* Mobile collapse into stacked layout
+
+### `/player/:id`
+
+* Profile header with large photo, name, jersey number
+* Bio info:
+
+  * Bats/Throws
+  * Height/Weight
+  * Hometown
+  * DOB
+  * Debut year
+* Season stats table (batting & pitching)
+
+---
+
+## Database Schema
+
+### `players`
+
+| Field                 | Type         |
+| --------------------- | ------------ |
+| id                    | UUID (PK)    |
+| first\_name           | text         |
+| last\_name            | text         |
+| jersey\_number        | integer      |
+| position              | text         |
+| bats                  | text (L/R/S) |
+| throws                | text (L/R/S) |
+| height                | text         |
+| weight                | text         |
+| birthdate             | date         |
+| hometown              | text         |
+| debut\_year           | integer      |
+| profile\_picture\_url | text         |
+
+### `games`
+
+| Field       | Type       |
+| ----------- | ---------- |
+| id          | UUID (PK)  |
+| date        | date       |
+| opponent    | text       |
+| location    | text       |
+| is\_home    | boolean    |
+| score\_us   | integer    |
+| score\_them | integer    |
+| result      | text (W/L) |
+
+### `player_stats`
+
+| Field                        | Type                    |
+| ---------------------------- | ----------------------- |
+| id                           | UUID (PK)               |
+| player\_id                   | FK to `players.id`      |
+| season                       | text                    |
+| stat\_type                   | text (batting/pitching) |
+| GP, AB, H, HR, RBI, AVG, OBP | int/float (batting)     |
+| ERA, IP, SO, BB, W, L        | int/float (pitching)    |
+
+---
+
+## Components to Build
+
+* `Navbar.tsx` with sticky top and responsive menu
+* `PlayerCard.tsx`
+* `ScheduleWidget.tsx`
+* `StatsTable.tsx`
+* `GameCard.tsx` (for mobile display of recent matches)
+* `Footer.tsx`
+
+---
+
+## Guardrails & Rules
+
+* Do not use `any` in TypeScript
+* All routes must be fully responsive
+* No hardcoded player data; pull from Supabase or fallback mock JSON
+* Abstract UI components and reuse patterns
+* Use `@/components/` for shared modules
+* No modal-based navigation
+* All buttons and nav links must be keyboard accessible
+
+---
+
+## Future Features (Post-MVP)
+
+* Admin login + CMS dashboard for stat input
+* Search bar on stats and roster pages
+* API sync with GameChanger (if access becomes available)
+* Highlight video embeds
+* Team merch or donation section
+
+---
+
+## Deployment & Workflow
+
+* Local dev with Supabase CLI or local docker
+* Push to GitHub triggers Vercel preview deployments
+* Use `.env` for Supabase keys
+* `README.md` should include setup, scripts, and schema migration steps

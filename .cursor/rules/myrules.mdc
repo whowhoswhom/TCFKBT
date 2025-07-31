@@ -1,0 +1,159 @@
+---
+alwaysApply: true
+---
+
+# Cursor Behavior and Construction Rules for Town & Country Ford Baseball Site
+
+[project]
+name = "Town & Country Ford Baseball Website"
+stack = ["Next.js", "React", "TypeScript", "TailwindCSS"]
+theme = "Dark with Ford Blue"
+environment = "MVP - UI-focused only (Supabase and Vercel later)"
+
+[structure]
+require_directory_structure = true
+pages_root = "src/app"
+components_root = "src/components"
+data_root = "src/data"
+enforce_dynamic_routes = true
+allow_layout_reuse = true
+
+[styling]
+enforce_tailwind = true
+primary_color = "#003399"
+background_color = "#0D1117"
+text_color = "#FFFFFF"
+use_custom_font = true
+font_family = "Inter, sans-serif"
+
+[routing]
+include_pages = ["/", "/schedule", "/stats", "/roster", "/player/[id]"]
+global_layout_file = "src/app/layout.tsx"
+global_stylesheet = "src/app/globals.css"
+
+[components]
+required = [
+  "Navbar.tsx",
+  "Footer.tsx",
+  "PlayerCard.tsx",
+  "ScheduleWidget.tsx",
+  "StatsTable.tsx",
+  "GameCard.tsx",
+  "PlayerBio.tsx"
+]
+reusable_pattern = true
+prefix_with_namespace = true
+
+[mock_data]
+location = "src/data"
+files = ["players.json", "player_stats.json"]
+allow_hardcoded_placeholder = false
+fallback_image_url = "https://via.placeholder.com/150"
+
+[typescript]
+strict = true
+disallow_any = true
+prefer_interfaces = true
+default_props_type = "Props"
+
+[accessibility]
+keyboard_navigation = true
+minimum_contrast_ratio = 4.5
+aria_labels_required = true
+
+[development]
+allow_test_components = false
+use_env_file = true
+use_relative_imports = true
+default_git_branch = "main"
+
+[supabase]
+integrate_later = true
+defer_client_setup = true
+do_not_generate_backend_code = true
+
+[vercel]
+defer_configuration = true
+no_custom_deploy_hooks = true
+
+[readme]
+generate_file = true
+include_mermaid_diagram = true
+auto_update_on_structure_change = true# Cursor Behavior and Construction Rules for Town & Country Ford Baseball Site
+
+[project]
+name = "Town & Country Ford Baseball Website"
+stack = ["Next.js", "React", "TypeScript", "TailwindCSS"]
+theme = "Dark with Ford Blue"
+environment = "MVP - UI-focused only (Supabase and Vercel later)"
+
+[structure]
+require_directory_structure = true
+pages_root = "src/app"
+components_root = "src/components"
+data_root = "src/data"
+enforce_dynamic_routes = true
+allow_layout_reuse = true
+
+[styling]
+enforce_tailwind = true
+primary_color = "#003399"
+background_color = "#0D1117"
+text_color = "#FFFFFF"
+use_custom_font = true
+font_family = "Inter, sans-serif"
+
+[routing]
+include_pages = ["/", "/schedule", "/stats", "/roster", "/player/[id]"]
+global_layout_file = "src/app/layout.tsx"
+global_stylesheet = "src/app/globals.css"
+
+[components]
+required = [
+  "Navbar.tsx",
+  "Footer.tsx",
+  "PlayerCard.tsx",
+  "ScheduleWidget.tsx",
+  "StatsTable.tsx",
+  "GameCard.tsx",
+  "PlayerBio.tsx"
+]
+reusable_pattern = true
+prefix_with_namespace = true
+
+[mock_data]
+location = "src/data"
+files = ["players.json", "player_stats.json"]
+allow_hardcoded_placeholder = false
+fallback_image_url = "https://via.placeholder.com/150"
+
+[typescript]
+strict = true
+disallow_any = true
+prefer_interfaces = true
+default_props_type = "Props"
+
+[accessibility]
+keyboard_navigation = true
+minimum_contrast_ratio = 4.5
+aria_labels_required = true
+
+[development]
+allow_test_components = false
+use_env_file = true
+use_relative_imports = true
+default_git_branch = "main"
+
+[supabase]
+integrate_later = true
+defer_client_setup = true
+do_not_generate_backend_code = true
+
+[vercel]
+defer_configuration = true
+no_custom_deploy_hooks = true
+
+[readme]
+generate_file = true
+include_mermaid_diagram = true
+auto_update_on_structure_change = true
