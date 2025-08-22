@@ -77,7 +77,7 @@ const playersData = [
   }
 ];
 
-const playerStatsData = [
+const playerStatsData: PlayerStats[] = [
   {
     "player_id": "bmedina",
     "stat_type": "batting",
@@ -167,12 +167,48 @@ export interface Player {
   profile_picture_url: string;
 }
 
-export interface PlayerStats {
+interface BasePlayerStats {
   player_id: string;
   stat_type: 'batting' | 'pitching' | 'fielding';
   season: string;
-  [key: string]: any; // For all the stat fields
 }
+
+export interface BattingStats extends BasePlayerStats {
+  stat_type: 'batting';
+  GP: number;
+  AB: number;
+  H: number;
+  HR: number;
+  RBI: number;
+  AVG: number;
+  OBP: number;
+  SLG: number;
+  SB: number;
+}
+
+export interface PitchingStats extends BasePlayerStats {
+  stat_type: 'pitching';
+  IP: number;
+  ERA: number;
+  W: number;
+  L: number;
+  SO: number;
+  BB: number;
+  WHIP: number;
+  SV: number;
+}
+
+export interface FieldingStats extends BasePlayerStats {
+  stat_type: 'fielding';
+  GP: number;
+  TC: number;
+  PO: number;
+  A: number;
+  E: number;
+  FPCT: number;
+}
+
+export type PlayerStats = BattingStats | PitchingStats | FieldingStats;
 
 // Utility functions
 export const getAllPlayers = (): Player[] => {
@@ -183,42 +219,51 @@ export const getPlayerById = (id: string): Player | undefined => {
   return playersData.find(player => player.id === id) as Player | undefined;
 };
 
-export const getPlayerStats = (playerId?: string, statType?: 'batting' | 'pitching' | 'fielding'): PlayerStats[] => {
-  let stats = playerStatsData as PlayerStats[];
-  
+export function getPlayerStats(playerId?: string): PlayerStats[];
+export function getPlayerStats<T extends PlayerStats['stat_type']>(playerId: string | undefined, statType: T): Extract<PlayerStats, { stat_type: T }>[];
+export function getPlayerStats(playerId?: string, statType?: PlayerStats['stat_type']): PlayerStats[] {
+  let stats = playerStatsData;
+
   if (playerId) {
     stats = stats.filter(stat => stat.player_id === playerId);
   }
-  
+
   if (statType) {
     stats = stats.filter(stat => stat.stat_type === statType);
   }
-  
-  return stats;
-};
 
-export const getBattingStats = (): PlayerStats[] => {
+  return stats;
+}
+
+export const getBattingStats = (): BattingStats[] => {
   return getPlayerStats(undefined, 'batting');
 };
 
-export const getPitchingStats = (): PlayerStats[] => {
+export const getPitchingStats = (): PitchingStats[] => {
   return getPlayerStats(undefined, 'pitching');
 };
 
-export const getFieldingStats = (): PlayerStats[] => {
+export const getFieldingStats = (): FieldingStats[] => {
   return getPlayerStats(undefined, 'fielding');
 };
 
-export const getPlayerWithStats = (playerId: string) => {
+export const getPlayerWithStats = (playerId: string): {
+  player: Player | undefined;
+  stats: {
+    batting?: BattingStats;
+    pitching?: PitchingStats;
+    fielding?: FieldingStats;
+  };
+} => {
   const player = getPlayerById(playerId);
   const stats = getPlayerStats(playerId);
-  
+
   return {
     player,
     stats: {
-      batting: stats.find(s => s.stat_type === 'batting'),
-      pitching: stats.find(s => s.stat_type === 'pitching'),
-      fielding: stats.find(s => s.stat_type === 'fielding')
-    }
+      batting: stats.find(s => s.stat_type === 'batting') as BattingStats | undefined,
+      pitching: stats.find(s => s.stat_type === 'pitching') as PitchingStats | undefined,
+      fielding: stats.find(s => s.stat_type === 'fielding') as FieldingStats | undefined,
+    },
   };
-}; 
+};
