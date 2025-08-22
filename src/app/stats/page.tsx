@@ -1,50 +1,44 @@
+import StatsTable, { Column } from '@/components/StatsTable';
 import { getBattingStats, getPitchingStats, getAllPlayers } from '@/utils/fetchMockData';
 
-interface StatsTableProps {
-  data: any[];
-  columns: { key: string; label: string }[];
-  title: string;
+interface BattingStat {
+  player_id: string;
+  stat_type: 'batting';
+  season: string;
+  GP: number;
+  AB: number;
+  H: number;
+  HR: number;
+  RBI: number;
+  AVG: number;
+  OBP: number;
+  SLG: number;
+  SB: number;
+  player_name: string;
 }
 
-function StatsTable({ data, columns, title }: StatsTableProps) {
-  return (
-    <div className="card">
-      <h2 className="text-2xl font-bold text-white mb-6">{title}</h2>
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-gray-700">
-              {columns.map((column) => (
-                <th key={column.key} className="py-3 px-4 text-left text-gray-300 font-semibold">
-                  <span>{column.label}</span>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((row, index) => (
-              <tr key={index} className="border-b border-gray-700 hover:bg-gray-700">
-                {columns.map((column) => (
-                  <td key={column.key} className="py-3 px-4 text-white">
-                    {row[column.key]}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
+interface PitchingStat {
+  player_id: string;
+  stat_type: 'pitching';
+  season: string;
+  IP: number;
+  ERA: number;
+  W: number;
+  L: number;
+  SO: number;
+  BB: number;
+  WHIP: number;
+  SV: number;
+  player_name: string;
 }
 
 export default function StatsPage() {
-  const battingStats = getBattingStats();
-  const pitchingStats = getPitchingStats();
+  const battingStats = getBattingStats() as Omit<BattingStat, 'player_name'>[];
+  const pitchingStats = getPitchingStats() as Omit<PitchingStat, 'player_name'>[];
   const players = getAllPlayers();
 
   // Join stats with player names
-  const battingWithNames = battingStats.map(stat => {
+  const battingWithNames: BattingStat[] = battingStats.map(stat => {
     const player = players.find(p => p.id === stat.player_id);
     return {
       ...stat,
@@ -52,7 +46,7 @@ export default function StatsPage() {
     };
   });
 
-  const pitchingWithNames = pitchingStats.map(stat => {
+  const pitchingWithNames: PitchingStat[] = pitchingStats.map(stat => {
     const player = players.find(p => p.id === stat.player_id);
     return {
       ...stat,
@@ -60,7 +54,7 @@ export default function StatsPage() {
     };
   });
 
-  const battingColumns = [
+  const battingColumns: Column<BattingStat>[] = [
     { key: 'player_name', label: 'Player' },
     { key: 'GP', label: 'GP' },
     { key: 'AB', label: 'AB' },
@@ -73,7 +67,7 @@ export default function StatsPage() {
     { key: 'SB', label: 'SB' },
   ];
 
-  const pitchingColumns = [
+  const pitchingColumns: Column<PitchingStat>[] = [
     { key: 'player_name', label: 'Player' },
     { key: 'IP', label: 'IP' },
     { key: 'ERA', label: 'ERA' },
@@ -91,13 +85,13 @@ export default function StatsPage() {
       <p className="text-xl mt-4">Team batting and pitching statistics</p>
       
       <div className="mt-8 space-y-8">
-        <StatsTable
+        <StatsTable<BattingStat>
           data={battingWithNames}
           columns={battingColumns}
           title="Batting Statistics"
         />
-        
-        <StatsTable
+
+        <StatsTable<PitchingStat>
           data={pitchingWithNames}
           columns={pitchingColumns}
           title="Pitching Statistics"
