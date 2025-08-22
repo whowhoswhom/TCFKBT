@@ -1,14 +1,19 @@
 'use client';
 
 import Link from 'next/link';
-import { Player, PlayerStats } from '@/utils/fetchMockData';
+import {
+  Player,
+  BattingStats,
+  PitchingStats,
+  FieldingStats,
+} from '@/utils/fetchMockData';
 
 interface PlayerProfileProps {
   player: Player;
   stats: {
-    batting?: PlayerStats;
-    pitching?: PlayerStats;
-    fielding?: PlayerStats;
+    batting?: BattingStats;
+    pitching?: PitchingStats;
+    fielding?: FieldingStats;
   };
 }
 
