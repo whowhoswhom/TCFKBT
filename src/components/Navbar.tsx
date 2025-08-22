@@ -37,6 +37,9 @@ export default function Navbar() {
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="text-gray-300 hover:text-white focus:outline-none focus:text-white"
+              aria-label="Toggle navigation"
+              aria-expanded={isMenuOpen}
+              aria-controls="mobile-menu"
             >
               <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 {isMenuOpen ? (
@@ -51,7 +54,7 @@ export default function Navbar() {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden">
+          <div className="md:hidden" id="mobile-menu">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               <Link href="/" className="block px-3 py-2 text-gray-300 hover:text-white transition-colors">
                 Home

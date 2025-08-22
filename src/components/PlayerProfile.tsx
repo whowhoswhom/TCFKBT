@@ -1,14 +1,20 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
-import { Player, PlayerStats } from '@/utils/fetchMockData';
+import {
+  Player,
+  BattingStats,
+  PitchingStats,
+  FieldingStats,
+} from '@/utils/fetchMockData';
 
 interface PlayerProfileProps {
   player: Player;
   stats: {
-    batting?: PlayerStats;
-    pitching?: PlayerStats;
-    fielding?: PlayerStats;
+    batting?: BattingStats;
+    pitching?: PitchingStats;
+    fielding?: FieldingStats;
   };
 }
 
@@ -31,9 +37,11 @@ export default function PlayerProfile({ player, stats }: PlayerProfileProps) {
         <div className="card mb-8">
           <div className="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8">
             <div className="w-48 h-48 rounded-full overflow-hidden bg-gray-600 flex-shrink-0">
-              <img
+              <Image
                 src={imageUrl}
                 alt={`${player.first_name} ${player.last_name}`}
+                width={192}
+                height={192}
                 className="w-full h-full object-cover"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;

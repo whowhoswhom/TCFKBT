@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { Player } from '@/utils/fetchMockData';
 
@@ -14,9 +15,11 @@ export default function PlayerCard({ player }: PlayerCardProps) {
       <div className="card hover:bg-gray-700 transition-colors cursor-pointer group">
         <div className="text-center">
           <div className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden bg-gray-600">
-            <img
+            <Image
               src={imageUrl}
               alt={`${player.first_name} ${player.last_name}`}
+              width={96}
+              height={96}
               className="w-full h-full object-cover"
             />
           </div>
